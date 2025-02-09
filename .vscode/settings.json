@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/6d97e4d9-445a-4ce5-bb5c-646c461945a8/resourceGroups/Architect-Copilot/providers/Microsoft.Web/sites/Architect-Copilot-Demo-v3",
+    "appService.deploySubpath": "."
+}
