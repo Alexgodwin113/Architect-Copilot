@@ -1,9 +1,7 @@
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { FontIcon, Stack, TextField } from '@fluentui/react';
 import { SendRegular } from '@fluentui/react-icons';
-
 import Send from '../../assets/Send.svg';
-
 import styles from './QuestionInput.module.css';
 import { ChatMessage } from '../../api';
 import { AppStateContext } from '../../state/AppProvider';
@@ -15,18 +13,29 @@ interface Props {
   placeholder?: string;
   clearOnSend?: boolean;
   conversationId?: string;
+  selectedPrompt?: string;  // ✅ Ensure this prop is passed from Chat.tsx
 }
 
-export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conversationId }: Props) => {
+export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conversationId, selectedPrompt }: Props) => {
   const [question, setQuestion] = useState<string>('');
   const [base64Image, setBase64Image] = useState<string | null>(null);
+  const [isPromptUsed, setIsPromptUsed] = useState<boolean>(false); // ✅ Track if prompt was clicked
 
   const appStateContext = useContext(AppStateContext);
   const OYD_ENABLED = appStateContext?.state.frontendSettings?.oyd_enabled || false;
 
+  // ✅ Ensure input updates when a prompt is clicked, but only if user hasn't typed manually
+  useEffect(() => {
+    if (selectedPrompt) {
+      console.log("Updating QuestionInput:", selectedPrompt); // Debugging
+      setQuestion(selectedPrompt);
+      setIsPromptUsed(false); // Reset manual typing flag
+    }
+  }, [selectedPrompt]);
+  
+
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-
     if (file) {
       await convertToBase64(file);
     }
@@ -46,15 +55,16 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
       return;
     }
 
-    const questionTest: ChatMessage["content"] = base64Image
+    const questionContent: ChatMessage["content"] = base64Image
       ? [{ type: "text", text: question }, { type: "image_url", image_url: { url: base64Image } }]
       : question.toString();
 
-    onSend(questionTest, conversationId);
+    onSend(questionContent, conversationId);
     setBase64Image(null);
 
     if (clearOnSend) {
       setQuestion('');
+      setIsPromptUsed(false); // ✅ Reset prompt usage after sending
     }
   };
 
@@ -67,6 +77,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
 
   const onQuestionChange = (_ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
     setQuestion(newValue || '');
+    setIsPromptUsed(true); // ✅ Mark that the user is manually typing
   };
 
   return (
