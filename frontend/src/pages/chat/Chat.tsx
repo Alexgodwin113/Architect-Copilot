@@ -12,7 +12,7 @@ import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { nord } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
 import styles from './chat.module.css'
-import Contoso from '../../assets/appmodlogo.svg'; // Ensure this path is correct and the file exists
+import Contoso from '../../assets/AC.svg'; // Ensure this path is correct and the file exists
 import { XSSAllowTags } from '../../constants/sanatizeAllowables'
 
 import {

@@ -54,7 +54,7 @@ class _UiSettings(BaseSettings):
 class _ChatHistorySettings(BaseSettings):
     model_config = SettingsConfigDict(
         env_prefix="AZURE_COSMOSDB_",
-        env_file=DOTENV_PATH,
+        env_file=DOTENV_PATH,  # Loads from .env
         extra="ignore",
         env_ignore_empty=True
     )
@@ -64,6 +64,7 @@ class _ChatHistorySettings(BaseSettings):
     account_key: Optional[str] = None
     conversations_container: str
     enable_feedback: bool = False
+
 
 
 class _PromptflowSettings(BaseSettings):
@@ -786,8 +787,9 @@ class _AppSettings(BaseModel):
         
         except ValidationError:
             self.chat_history = None
-        
+            print(f"Chat History Loaded: {self.chat_history}")
         return self
+        
     
     @model_validator(mode="after")
     def set_datasource_settings(self) -> Self:

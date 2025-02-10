@@ -1,27 +1,27 @@
-import { useContext, useState } from 'react'
-import { FontIcon, Stack, TextField } from '@fluentui/react'
-import { SendRegular } from '@fluentui/react-icons'
+import { useContext, useState } from 'react';
+import { FontIcon, Stack, TextField } from '@fluentui/react';
+import { SendRegular } from '@fluentui/react-icons';
 
-import Send from '../../assets/Send.svg'
+import Send from '../../assets/Send.svg';
 
-import styles from './QuestionInput.module.css'
-import { ChatMessage } from '../../api'
-import { AppStateContext } from '../../state/AppProvider'
-import { resizeImage } from '../../utils/resizeImage'
+import styles from './QuestionInput.module.css';
+import { ChatMessage } from '../../api';
+import { AppStateContext } from '../../state/AppProvider';
+import { resizeImage } from '../../utils/resizeImage';
 
 interface Props {
-  onSend: (question: ChatMessage['content'], id?: string) => void
-  disabled: boolean
-  placeholder?: string
-  clearOnSend?: boolean
-  conversationId?: string
+  onSend: (question: ChatMessage['content'], id?: string) => void;
+  disabled: boolean;
+  placeholder?: string;
+  clearOnSend?: boolean;
+  conversationId?: string;
 }
 
 export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conversationId }: Props) => {
-  const [question, setQuestion] = useState<string>('')
+  const [question, setQuestion] = useState<string>('');
   const [base64Image, setBase64Image] = useState<string | null>(null);
 
-  const appStateContext = useContext(AppStateContext)
+  const appStateContext = useContext(AppStateContext);
   const OYD_ENABLED = appStateContext?.state.frontendSettings?.oyd_enabled || false;
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -43,36 +43,31 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
 
   const sendQuestion = () => {
     if (disabled || !question.trim()) {
-      return
+      return;
     }
 
-    const questionTest: ChatMessage["content"] = base64Image ? [{ type: "text", text: question }, { type: "image_url", image_url: { url: base64Image } }] : question.toString();
+    const questionTest: ChatMessage["content"] = base64Image
+      ? [{ type: "text", text: question }, { type: "image_url", image_url: { url: base64Image } }]
+      : question.toString();
 
-    if (conversationId && questionTest !== undefined) {
-      onSend(questionTest, conversationId)
-      setBase64Image(null)
-    } else {
-      onSend(questionTest)
-      setBase64Image(null)
-    }
+    onSend(questionTest, conversationId);
+    setBase64Image(null);
 
     if (clearOnSend) {
-      setQuestion('')
+      setQuestion('');
     }
-  }
+  };
 
   const onEnterPress = (ev: React.KeyboardEvent<Element>) => {
     if (ev.key === 'Enter' && !ev.shiftKey && !(ev.nativeEvent?.isComposing === true)) {
-      ev.preventDefault()
-      sendQuestion()
+      ev.preventDefault();
+      sendQuestion();
     }
-  }
+  };
 
   const onQuestionChange = (_ev: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>, newValue?: string) => {
-    setQuestion(newValue || '')
-  }
-
-  const sendQuestionDisabled = disabled || !question.trim()
+    setQuestion(newValue || '');
+  };
 
   return (
     <Stack horizontal className={styles.questionInputContainer}>
@@ -91,7 +86,7 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
           <input
             type="file"
             id="fileInput"
-            onChange={(event) => handleImageUpload(event)}
+            onChange={handleImageUpload}
             accept="image/*"
             className={styles.fileInput}
           />
@@ -102,7 +97,8 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
               aria-label='Upload Image'
             />
           </label>
-        </div>)}
+        </div>
+      )}
       {base64Image && <img className={styles.uploadedImage} src={base64Image} alt="Uploaded Preview" />}
       <div
         className={styles.questionInputSendButtonContainer}
@@ -110,8 +106,9 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
         tabIndex={0}
         aria-label="Ask question button"
         onClick={sendQuestion}
-        onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? sendQuestion() : null)}>
-        {sendQuestionDisabled ? (
+        onKeyDown={e => (e.key === 'Enter' || e.key === ' ' ? sendQuestion() : null)}
+      >
+        {disabled || !question.trim() ? (
           <SendRegular className={styles.questionInputSendButtonDisabled} />
         ) : (
           <img src={Send} className={styles.questionInputSendButton} alt="Send Button" />
@@ -119,5 +116,5 @@ export const QuestionInput = ({ onSend, disabled, placeholder, clearOnSend, conv
       </div>
       <div className={styles.questionInputBottomBorder} />
     </Stack>
-  )
-}
+  );
+};
