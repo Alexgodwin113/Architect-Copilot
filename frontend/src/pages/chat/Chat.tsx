@@ -11,8 +11,8 @@ import DOMPurify from 'dompurify'
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { nord } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
-import styles from './Chat.module.css'
-import Contoso from '../../assets/appmodlogo.png'
+import styles from './chat.module.css'
+import Contoso from '../../assets/appmodlogo.svg'; // Ensure this path is correct and the file exists
 import { XSSAllowTags } from '../../constants/sanatizeAllowables'
 
 import {
@@ -977,7 +977,7 @@ const Chat = () => {
               </h5>
               <div tabIndex={0}>
                 <ReactMarkdown
-                  linkTarget="_blank"
+                  components={{ a: ({ node, ...props }) => <a {...props} target="_blank" /> }}
                   className={styles.citationPanelContent}
                   children={DOMPurify.sanitize(activeCitation.content, { ALLOWED_TAGS: XSSAllowTags })}
                   remarkPlugins={[remarkGfm]}
