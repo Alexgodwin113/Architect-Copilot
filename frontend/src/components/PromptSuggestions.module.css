@@ -1,41 +1,29 @@
-.promptContainer {
-    padding: 10px;
-    background: #f4f4f4;
-    border-radius: 8px;
-    text-align: center;
+.promptGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-top: 40px; /* Increased space between header and boxes */
   }
   
-  .promptTitle {
-    font-size: 16px;
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
-  .promptList {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .promptButton {
-    background-color: white;
-    border: 1px solid #0078D4;
-    color: #0078D4;
-    padding: 8px 12px;
-    border-radius: 5px;
-    font-size: 14px;
+  .promptBox {
+    background: white;
+    border: 2px solid #4a4a4a; /* Lighter black border */
+    border-radius: 12px;
+    padding: 20px 24px;  /* Increased size */
+    font-size: 16px;  /* Bigger text */
+    font-weight: 500;
+    text-align: left;
     cursor: pointer;
-    transition: all 0.2s ease-in-out;
+    transition: background 0.2s ease-in-out, box-shadow 0.2s;
+    box-shadow: 2px 3px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    min-height: 85px;  /* Taller buttons */
   }
   
-  .promptButton:hover {
-    background-color: #0078D4;
-    color: white;
+  .promptBox:hover {
+    background: #f8f8f8; /* Subtle hover effect */
   }
   
-  .activePrompt {
-    background-color: #005a9e !important;
-    color: white !important;
-    font-weight: bold;
-  }
+  /* Removed click effect */
   

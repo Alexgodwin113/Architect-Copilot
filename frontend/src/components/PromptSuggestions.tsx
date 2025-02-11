@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styles from "./PromptSuggestions.module.css"; // Ensure this file exists
 
 interface PromptSuggestionsProps {
@@ -6,34 +6,26 @@ interface PromptSuggestionsProps {
 }
 
 const PromptSuggestions: React.FC<PromptSuggestionsProps> = ({ onPromptClick }) => {
-  const [selectedPrompt, setSelectedPrompt] = useState<string | null>(null);
-
   const examplePrompts = [
-    "Give me an overview about TechSphere",
-    "Which applications currently have the highest amount of tech debt?",
-    "How can I transform this application to meet my business standards?",
-    "What needs to change to meet my company's naming conventions?",
+    "What are some applications in Contoso with technical debt?",
+    "What are the recommended architectural patterns for modernizing applications at Contoso?",
+    "What are the recommended naming conventions that align with Contoso's business standards",
+    "What are the key factors in deciding whether to rehost, refactor, rearchitect, or rebuild an application?",
+    "How do I determine the best cloud migration strategy for my applications at Contoso?",
+    "Can you provide details about uptime and availability standards at Contoso?"
   ];
 
-  const handlePromptClick = (prompt: string) => {
-    setSelectedPrompt(prompt);  // Highlight selected prompt
-    onPromptClick(prompt);
-  };
-
   return (
-    <div className={styles.promptContainer}>
-      <h3 className={styles.promptTitle}>Example Prompts</h3>
-      <div className={styles.promptList}>
-        {examplePrompts.map((prompt, index) => (
-          <button 
-            key={index} 
-            className={`${styles.promptButton} ${selectedPrompt === prompt ? styles.activePrompt : ""}`} 
-            onClick={() => handlePromptClick(prompt)}
-          >
-            {prompt}
-          </button>
-        ))}
-      </div>
+    <div className={styles.promptGrid}>
+      {examplePrompts.map((prompt, index) => (
+        <button 
+          key={index} 
+          className={styles.promptBox} 
+          onClick={() => onPromptClick(prompt)}
+        >
+          {prompt}
+        </button>
+      ))}
     </div>
   );
 };
