@@ -11,7 +11,7 @@ import { AppStateProvider } from './state/AppProvider'
 
 import './index.css'
 
-initializeIcons()
+initializeIcons("https://res.cdn.office.net/files/fabric-cdn-prod_20241209.001/assets/icons/")
 
 export default function App() {
   return (
